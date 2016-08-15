@@ -5,47 +5,75 @@ var drone = bebop.createClient();
 drone.connect(function() {
   
   //adjusting max values
-	drone.PilotingSettings.maxAltitude(2);
-	SpeedSettings.maxVerticalSpeed(0.2);
-
+	drone.PilotingSettings.maxAltitude(10);
+	drone.SpeedSettings.maxVerticalSpeed(1);
+  drone.SpeedSettings.hullProtection(1);
 
   //take off
-	drone.takeOff();
+  drone.takeoff();
 
-
-  //actions
-	setTimeout(function() {
-    	drone.up(1);
+  setTimeout(function() {
+    drone.up();
   }, 3000);
 
   setTimeout(function() {
-  	  	drone.stop();
- 	 }, 4000);
+    drone.stop();
+  }, 5500);
+  
+  setTimeout(function(){
+    drone.right(20);
+  }, 6000);
+  setTimeout(function(){
+    drone.up(100);
+  }, 6000);
+  setTimeout(function(){
+    drone.down(80);
+  }, 12000);
+  setTimeout(function(){
+    drone.right(20);
+  }, 12000);
+  setTimeout(function(){
+    drone.down(80);
+  }, 18000);
+  setTimeout(function(){
+    drone.left(20);
+  }, 18000);
+  setTimeout(function(){
+    drone.up(100);
+  }, 24000);
+  setTimeout(function(){
+    drone.left(20);
+  }, 24000);
 
   setTimeout(function() {
-   	 	drone.down(1);
-  }, 2000);
+    drone.stop();
+  }, 30000);
 
- 	setTimeout(function() {
-    	drone.stop();
-  }, 5000);
-
+  
   setTimeout(function() {
-    	drone.land();
-  }, 7000);
-
+    drone.land();
+  }, 31000);
 
   //events
+  var predata = 0;
   drone.on("battery", function (data) {
-    if(data < 20){
-      console.log("Battery low!" + data.toString());
-      drone.emergency();
+    if(data < 10){
+      console.log("Battery low - " + data.toString() +"%");
+      drone.land();
     }
+    else if (data<30){
+      if (predata!=data){
+        console.log("Battery percentage is: " + data.toString());
+        predata = data;
+      }
+    }
+    
   });
 
   drone.on("ready", function(){
     console.log("Drone is connected!");
   });
+  
   
   drone.on("takingOff", function(){
     console.log("Drone is taking off now!");
@@ -57,6 +85,5 @@ drone.connect(function() {
 
   drone.on("landed", function(){
     console.log("Drone has landed now!");
-  })
-
+  });
 });

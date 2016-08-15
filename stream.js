@@ -1,4 +1,5 @@
 var bebop = require("node-bebop");
+var http = require("http");
 var drone = bebop.createClient();
 var mjpg = drone.getMjpegStream();
 var buf = null;
