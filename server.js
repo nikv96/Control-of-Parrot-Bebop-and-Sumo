@@ -1,8 +1,15 @@
 var bebop = require('node-bebop');
-
+var stdin =process.openStdin();
 var drone = bebop.createClient();
 
 drone.connect(function() {
+
+  stdin.addListener("data", function(d) { 
+    if(d.toString()=='q\n'){
+      console.log("EMERGENCY!!");
+      drone.land();
+    }
+  });
   
   //adjusting max values
 	drone.PilotingSettings.maxAltitude(10);
@@ -10,49 +17,57 @@ drone.connect(function() {
   drone.SpeedSettings.hullProtection(1);
 
   //take off
+  //drone.land();
   drone.takeoff();
 
   setTimeout(function() {
-    drone.up();
+    drone.stop();
   }, 3000);
-
-  setTimeout(function() {
-    drone.stop();
-  }, 5500);
   
   setTimeout(function(){
-    drone.right(20);
+    drone.up(100);
+  }, 4000);
+  setTimeout(function(){
+    drone.down(100);
   }, 6000);
   setTimeout(function(){
     drone.up(100);
-  }, 6000);
+  }, 8000);
   setTimeout(function(){
-    drone.down(80);
-  }, 12000);
-  setTimeout(function(){
-    drone.right(20);
-  }, 12000);
-  setTimeout(function(){
-    drone.down(80);
-  }, 18000);
-  setTimeout(function(){
-    drone.left(20);
-  }, 18000);
+    drone.down(100);
+  }, 10000);
   setTimeout(function(){
     drone.up(100);
-  }, 24000);
+  }, 12000);
   setTimeout(function(){
-    drone.left(20);
-  }, 24000);
+    drone.down(100);
+  }, 14000);
+  setTimeout(function(){
+    drone.up(100);
+  }, 16000);
+  setTimeout(function(){
+    drone.down(100);
+  }, 18000);
 
-  setTimeout(function() {
+  setTimeout(function(){
+    drone.up(100);
+  }, 20000);
+
+  setTimeout(function(){
     drone.stop();
-  }, 30000);
+  }, 25000);
 
-  
-  setTimeout(function() {
+  setTimeout(function(){
+    drone.frontFlip();
+  }, 26000);
+
+  setTimeout(function(){
+    drone.backFlip();
+  },32000);
+
+  setTimeout(function(){
     drone.land();
-  }, 31000);
+  },40000);
 
   //events
   var predata = 0;
