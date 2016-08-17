@@ -13,7 +13,7 @@ drone.connect(function() {
   
   //adjusting max values
 	drone.PilotingSettings.maxAltitude(10);
-	drone.SpeedSettings.maxVerticalSpeed(1);
+	drone.SpeedSettings.maxVerticalSpeed(2);
   drone.SpeedSettings.hullProtection(1);
 
   //take off
@@ -22,7 +22,27 @@ drone.connect(function() {
 
   setTimeout(function() {
     drone.stop();
-  }, 3000);
+  }, 5000);
+
+  setTimeout(function(){
+    drone.up(60);
+  },6000);
+
+  setTimeout(function(){
+    drone.forward(2);
+  }, 12000);
+
+  setTimeout(function(){
+    drone.right(5);
+  }, 22000);
+
+  setTimeout(function(){
+    drone.stop();
+  }, 24000);
+  setTimeout(function(){
+    drone.land();
+  }, 26000);
+  /*
   
   setTimeout(function(){
     drone.up(100);
@@ -68,6 +88,7 @@ drone.connect(function() {
   setTimeout(function(){
     drone.land();
   },40000);
+*/
 
   //events
   var predata = 0;
