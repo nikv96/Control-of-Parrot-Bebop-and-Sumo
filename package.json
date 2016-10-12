@@ -6,14 +6,12 @@
     "dependencies": {
         "ar-drone": "latest",
         "node-bebop": "latest",
-        "node-sumo": "latest",
         "express": "latest",
         "socket.io":"latest",
         "socket.io-client":"latest",
         "dronestream":"latest"
     },
     "devDependencies": {
-
     },
     "engine": "node >= 0.6.6"
 }
