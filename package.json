@@ -1,0 +1,19 @@
+{
+    "name": "Parrot-Drone-Interface",
+    "description": "Web Interface for Parrot Drones",
+    "author": "Nikhil Venkatesh",
+    "version": "0.0.1",
+    "dependencies": {
+        "ar-drone": "latest",
+        "node-bebop": "latest",
+        "node-sumo": "latest",
+        "express": "latest",
+        "socket.io":"latest",
+        "socket.io-client":"latest",
+        "dronestream":"latest"
+    },
+    "devDependencies": {
+
+    },
+    "engine": "node >= 0.6.6"
+}
