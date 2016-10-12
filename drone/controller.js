@@ -1,11 +1,6 @@
 var io = require('socket.io').listen(3002);
 io.set('log level', 1);
 
-document.addEventListener('trollface', function(e) {
-    console.log('trolled');
-    //add face detection code here
-});
-
 io.on('connection', function (socket) {
     var drone = require('ar-drone');
     var client = drone.createClient();
