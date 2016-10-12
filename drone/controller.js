@@ -1,6 +1,11 @@
 var io = require('socket.io').listen(3002);
 io.set('log level', 1);
 
+document.addEventListener('trollface', function(e) {
+    console.log('trolled');
+    //add face detection code here
+});
+
 io.on('connection', function (socket) {
     var drone = require('ar-drone');
     var client = drone.createClient();
@@ -18,9 +23,16 @@ io.on('connection', function (socket) {
         socket.emit('event', { name: 'altitude',value: currentAltitude});
     },1000);
 
-    var currentState="";
+    var currentState='';
 
     socket.on('event', function (data) {
+        if(data.name == 'trollface'){
+            currentState = 'trollface';
+            console.log('Switching to Troll Face mode');
+            var event = new CustomEvent('trollface');
+            document.dispatchEvent(event);
+            client.stop();
+        }
         if(data.name == 'takeoff'){
             currentState='takeoff';
             console.log('Take off');
@@ -53,94 +65,94 @@ io.on('connection', function (socket) {
         if(data.name=='front'){
             currentState='front';
             var speed=Math.abs(data.value*1.42);            
-            console.log("Browser asked Ar Drone to go ahead @"+speed*100+"% speed");
+            console.log('Browser asked Ar Drone to go ahead @'+speed*100+'% speed');
             client.front(speed);
             client.after(1000,function(){                
-                if(currentState!="hover"){
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                if(currentState!='hover'){
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
-                currentState="hover";
+                currentState='hover';
                 }
             })
         }
-        if(data.name=="back"){
-            currentState="back";
+        if(data.name=='back'){
+            currentState='back';
             var speed=Math.abs(data.value*1.42);            
-            console.log("Browser asked Ar Drone to go back @"+speed*100+"% speed");
+            console.log('Browser asked Ar Drone to go back @'+speed*100+'% speed');
             client.back(speed);
             client.after(1000,function(){                
-                if(currentState!="hover"){
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                if(currentState!='hover'){
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
-                currentState="hover";
+                currentState='hover';
                 }
             })
         }
-        if(data.name=="left"){
-            currentState="left";
+        if(data.name=='left'){
+            currentState='left';
             var speed=Math.abs(data.value*1.66);            
-            console.log("Browser asked Ar Drone to go left @"+speed*100+"% speed");
+            console.log('Browser asked Ar Drone to go left @'+speed*100+'% speed');
             client.left(speed);
             client.after(1000,function(){                
-                if(currentState!="hover"){
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                if(currentState!='hover'){
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
-                currentState="hover";
+                currentState='hover';
                 }
             })
         }
-        if(data.name=="right"){
-            currentState="right";
+        if(data.name=='right'){
+            currentState='right';
             var speed=Math.abs(data.value*1.66);            
-            console.log("Browser asked Ar Drone to go right @"+speed*100+"% speed");
+            console.log('Browser asked Ar Drone to go right @'+speed*100+'% speed');
             client.right(speed);
             client.after(1000,function(){                
-                if(currentState!="hover"){
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                if(currentState!='hover'){
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
-                currentState="hover";
+                currentState='hover';
                 }
             })
         }
-        if(data.name=="emergency"){
-            currentState="emergency";
-            console.log("Browser asked Ar Drone to disable emergency");
+        if(data.name=='emergency'){
+            currentState='emergency';
+            console.log('Browser asked Ar Drone to disable emergency');
             client.disableEmergency();
         }
-        if(data.name=="flipLeft"){
-            console.log("Browser asked Ar Drone to flip left");
+        if(data.name=='flipLeft'){
+            console.log('Browser asked Ar Drone to flip left');
             client.animate('flipLeft', 1000);
         }
-        if(data.name=="flipAhead"){
-            console.log("Browser asked Ar Drone to flip ahead");
+        if(data.name=='flipAhead'){
+            console.log('Browser asked Ar Drone to flip ahead');
             client.animate('flipAhead', 1000);
         }
-        if(data.name=="flipBehind"){
-            console.log("Browser asked Ar Drone to flip behind");
+        if(data.name=='flipBehind'){
+            console.log('Browser asked Ar Drone to flip behind');
             client.animate('flipBehind', 1000);
         }
-        if(data.name=="flipRight"){
-            console.log("Browser asked Ar Drone to flip right");
+        if(data.name=='flipRight'){
+            console.log('Browser asked Ar Drone to flip right');
             client.animate('flipRight', 1000);
         }
-        if(data.name=="clockwise"){
-            console.log("Browser asked Ar Drone to rotate clockwise");
+        if(data.name=='clockwise'){
+            console.log('Browser asked Ar Drone to rotate clockwise');
             client.clockwise(0.5);
             client.after(1000,function(){                
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
             })
         }
-        if(data.name=="counterClockwise"){
-            console.log("Browser asked Ar Drone to rotate counter clockwise");
+        if(data.name=='counterClockwise'){
+            console.log('Browser asked Ar Drone to rotate counter clockwise');
             client.counterClockwise(0.5);
             client.after(1000,function(){                
-                console.log("Browser asked Ar Drone to Stay and Hover");
+                console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();
             })
         }        
-        if(data.name=="calibrate"){
-            console.log("Browser asked Ar Drone to calibrate");
+        if(data.name=='calibrate'){
+            console.log('Browser asked Ar Drone to calibrate');
             client.calibrate(0);
         }
     });
