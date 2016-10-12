@@ -1,7 +1,5 @@
-var app = require('express').createServer();
-var io = require('socket.io')(app);
-
-app.listen(3002);
+var io = require('socket.io').listen(3002);
+io.set('log level', 1);
 
 io.on('connection', function (socket) {
     var drone = require('ar-drone');
