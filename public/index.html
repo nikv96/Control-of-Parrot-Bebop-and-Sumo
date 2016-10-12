@@ -11,6 +11,48 @@
     <script type="text/javascript" src="js/leap-0.6.4.min.js"></script>
     <script type="text/javascript" src="js/client.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script>
+        $(document).on('keydown', function(e){
+            var pressedKey = e.key;
+            var pressedKeyCode = e.keyCode;
+            console.log(pressedKeyCode);
+            if (pressedKey == 't'){
+                console.log('Passed key to takeoff.');
+                $('#takeoff').click();
+            } else if(pressedKey == 'l') {
+                console.log('Passed key to land.');
+                $('#land').click();
+            } else if(pressedKey == 'w') {
+                console.log('Passed key to go up.');
+                $('#up').click();
+            } else if(pressedKey == 's') {
+                console.log('Passed key to go down.');
+                $('#down').click();
+            } else if(pressedKey == 'a') {
+                console.log('Passed key to go counterclockwise.');
+                $('#counterClockwise').click();
+            } else if(pressedKey == 'd') {
+                console.log('Passed key to go clockwise.');
+                $('#clockwise').click();
+            } else if(pressedKeyCode === 38) {
+                console.log('Passed key to go forward.');
+                $('#front').click();
+            } else if(pressedKeyCode === 40) {
+                console.log('Passed key to go backward.');
+                $('#back').click();
+            } else if(pressedKeyCode === 37) {
+                console.log('Passed key to go left.');
+                $('#left').click();
+            } else if(pressedKeyCode === 39) {
+                console.log('Passed key to go right.');
+                $('#right').click();
+            } else {
+                console.log('Passed key to hover.');
+                $('#hover').click();
+            }
+        });
+    </script>
 </head>
 
 <body>
