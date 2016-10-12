@@ -4,8 +4,8 @@ var io = require('socket.io')(app);
 app.listen(3002);
 
 io.on('connection', function (socket) {
-    var bebop = require('node-bebop');
-    var client = bebop.createClient();
+    var drone = require('ar-drone');
+    var client = drone.createClient();
 
     client.PilotingSettings.maxAltitude(10);
     client.SpeedSettings.maxVerticalSpeed(2);
