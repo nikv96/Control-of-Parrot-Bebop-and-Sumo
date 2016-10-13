@@ -13,7 +13,7 @@ var client, io, lastPng;
 var tracking = false;
 var debug = true;
 var processingImage = false;
-var face_cascade = new cv.CascadeClassifier(path.join(__dirname,'node_modules','opencv','data','haarcascade_frontalface_alt2.xml'));
+var face_cascade = new cv.CascadeClassifier(path.join(__dirname, '../','node_modules','opencv','data','haarcascade_frontalface_alt2.xml'));
 
 var ver_ctrl = new Controller(0.3, 0.01, 0.1)
   , hor_ctrl = new Controller(0.4, 0.01, 0.1)
@@ -115,7 +115,7 @@ function copterface(name, deps) {
     debug = deps.debug || false;
     io = deps.io;
     io.sockets.on('connection', function (socket) {
-        socket.on('/copterface', function (cmd) {
+        socket.on('copterface', function (cmd) {
             console.log("copterface", cmd);
             if (cmd == "toggle") {
               client.stop();
@@ -134,5 +134,3 @@ function copterface(name, deps) {
     });
 
 }
-
-module.exports = facetrack;
