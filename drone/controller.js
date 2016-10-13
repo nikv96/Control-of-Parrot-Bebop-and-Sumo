@@ -21,11 +21,9 @@ io.on('connection', function (socket) {
     var currentState='';
 
     socket.on('event', function (data) {
-        if(data.name == 'trollface'){
-            currentState = 'trollface';
-            console.log('Switching to Troll Face mode');
-            var event = new CustomEvent('trollface');
-            document.dispatchEvent(event);
+        if(data.name == 'facetrack'){
+            currentState = 'facetrack';
+            console.log('Switching to Face Track mode');
             client.stop();
         }
         if(data.name == 'takeoff'){

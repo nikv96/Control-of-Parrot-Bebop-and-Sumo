@@ -9,7 +9,8 @@
         "express": "latest",
         "socket.io":"latest",
         "socket.io-client":"latest",
-        "dronestream":"latest"
+        "dronestream":"latest",
+        "opencv":"~0.1.0"
     },
     "devDependencies": {
     },
