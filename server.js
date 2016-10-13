@@ -1,11 +1,16 @@
 var express = require('express')
     , app = express()
-    , server = require("http").createServer(app)
-
-app.use(express.static(__dirname + '/public'));
+    , server = require('http').Server(app)
 
 
-require("./drone/camera-feed");
-require("./drone/controller");
+app.use(express.static('public'));
 
-app.listen(3000);
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
+
+require('./drone/camera-feed');
+require('./drone/controller');
+require('./drone/facetrack');
+
+server.listen(3000);
