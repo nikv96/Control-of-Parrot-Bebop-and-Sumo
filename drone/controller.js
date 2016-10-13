@@ -1,12 +1,12 @@
-var io = require('socket.io').listen(3002);
-io.set('log level', 1);
+var io = require('socket.io')(3002);
+//io.set('log level', 1);
 
 io.on('connection', function (socket) {
     var drone = require('ar-drone');
+    console.log('drone required');
     var client = drone.createClient();
-
-    client.PilotingSettings.maxAltitude(10);
-    client.SpeedSettings.maxVerticalSpeed(2);
+    console.log('Connected');
+    client.config('control:altitude_max', '20000');
 
     setInterval(function(){
         var batteryLevel = client.battery();
@@ -24,7 +24,7 @@ io.on('connection', function (socket) {
         if(data.name == 'facetrack'){
             currentState = 'facetrack';
             console.log('Switching to Face Track mode');
-            client.stop();
+            socket.emit('/copterface',{name:'cmd', value:'toggle'});
         }
         if(data.name == 'takeoff'){
             currentState='takeoff';
@@ -33,7 +33,7 @@ io.on('connection', function (socket) {
         }
         if(data.name=='hover'){
             if(currentState!='hover'){
-                console.log(Hover);
+                console.log('Hover');
                 client.stop();
                 currentState='hover';
             }
@@ -60,7 +60,7 @@ io.on('connection', function (socket) {
             var speed=Math.abs(data.value*1.42);            
             console.log('Browser asked Ar Drone to go ahead @'+speed*100+'% speed');
             client.front(speed);
-            client.after(1000,function(){                
+            client.after(500,function(){                
                 if(currentState!='hover'){
                 console.log('Browser asked Ar Drone to Stay and Hover');
                 client.stop();

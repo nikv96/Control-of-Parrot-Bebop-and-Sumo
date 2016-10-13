@@ -6,6 +6,7 @@ $(function () {
 
     function startDroneController(){
         var socket = io.connect('http://localhost:3002');
+        console.log('connected to 3002')
 
         socket.on('connect', function () {
             console.log('Connected to server successfully!');
@@ -25,6 +26,10 @@ $(function () {
                 altitude = data.value;
                 document.getElementById('altitude-value').innerHTML = data.value+' m';
             }
+        });
+
+        $('#facedetect').click(function(){
+            console.log('face detection started');
         });
 
         $('#takeoff').click(function(){
@@ -49,11 +54,11 @@ $(function () {
         });
         $('#front').click(function(){
             console.log('Asking Server to send go ahead command to Ar Drone');
-            socket.emit('event',{name:'front', value:0.35});
+            socket.emit('event',{name:'front', value:0.2});
         });
         $('#back').click(function(){
             console.log('Asking Server to send go back command to Ar Drone');
-            socket.emit('event',{name:'back', value:0.35});
+            socket.emit('event',{name:'back', value:0.2});
         });
         $('#right').click(function(){
             console.log('Asking Server to send go right command to Ar Drone');
@@ -95,8 +100,8 @@ $(function () {
             console.log('Asking Server to send calibrate command to Ar Drone');
             socket.emit('event',{name:'calibrate'});
         });
-        /*
-        var leap_motion=true;
+        
+        var leap_motion=false;
 
         $('#leap').click(function(){
             if(leap_motion==true){
@@ -355,7 +360,7 @@ $(function () {
                         takeoff=false;
                     }
             }
-        });*/
+        });
 
     }
     startDroneStream();
