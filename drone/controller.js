@@ -1,12 +1,63 @@
 var io = require('socket.io')(3002);
 //io.set('log level', 1);
 
+var drone = require('ar-drone');
+console.log('Drone required');
+var client = drone.createClient();
+
+client.config('control:altitude_max', '20000');
+var pngStream = client.getPngStream();
 io.on('connection', function (socket) {
-    var drone = require('ar-drone');
-    console.log('drone required');
-    var client = drone.createClient();
+    var Controller = require('node-pid-controller');
+
+    // Initialize PID Controllers
+    var verticalPidController = new Controller(0.3, 0.01, 0.1), 
+        spinPidController = new Controller(0.4, 0.01, 0.1)
+        ;
     console.log('Connected');
-    client.config('control:altitude_max', '20000');
+    
+
+    var FaceTrack = require('./facetrack');
+    var faceTrack = FaceTrack(pngStream, function(info){
+        console.log(info);
+        var target = info.rects;
+        var im = info.image;
+        var targetWidth = 100;
+        target.centerX = target.x + target.width * 0.5;
+        target.centerY = target.y + target.height * 0.5;
+
+        var centerX = im.width() * 0.5;
+        var centerY = im.height() * 0.5;
+
+        var heightAmount = -( target.centerY - centerY ) / centerY;
+        var turnAmount = -( target.centerX - centerX ) / centerX;
+
+        heightAmount = verticalPidController.update(-heightAmount);
+        turnAmount   = spinPidController.update(-turnAmount);
+
+        var lim = 0.1;
+        if (Math.abs(target.width) > targetWidth){
+            client.stop();
+        } else if( Math.abs( turnAmount ) > lim || Math.abs( heightAmount ) > lim ){
+        
+            if(heightAmount < 0) {
+                client.down(Math.abs(heightAmount));
+            } else {
+                client.up(heightAmount);
+            }
+            if(turnAmount < 0) {
+                client.clockwise( Math.abs( turnAmount ) );
+            }
+            else{
+                client.counterClockwise( turnAmount );
+            }
+        } else{
+            client.stop();
+        }
+
+        dt = Math.min(Math.abs(turnAmount), Math.abs(heightAmount));
+        dt = dt * 2000;
+    });
 
     setInterval(function(){
         var batteryLevel = client.battery();
@@ -22,9 +73,15 @@ io.on('connection', function (socket) {
 
     socket.on('event', function (data) {
         if(data.name == 'facetrack'){
-            currentState = 'facetrack';
-            console.log('Switching to Face Track mode');
-            socket.emit('/copterface',{name:'cmd', value:'toggle'});
+            if (currentState != 'facetrack'){
+                currentState = 'facetrack';
+                console.log('Switching to Face Track mode');
+                faceTrack.start();
+            } else {
+                currentState = 'hover';
+                client.stop();
+                faceTrack.stop();
+            }            
         }
         if(data.name == 'takeoff'){
             currentState='takeoff';
@@ -57,7 +114,7 @@ io.on('connection', function (socket) {
         }
         if(data.name=='front'){
             currentState='front';
-            var speed=Math.abs(data.value*1.42);            
+            var speed=Math.abs(data.value*1);            
             console.log('Browser asked Ar Drone to go ahead @'+speed*100+'% speed');
             client.front(speed);
             client.after(500,function(){                
@@ -70,7 +127,7 @@ io.on('connection', function (socket) {
         }
         if(data.name=='back'){
             currentState='back';
-            var speed=Math.abs(data.value*1.42);            
+            var speed=Math.abs(data.value*1);            
             console.log('Browser asked Ar Drone to go back @'+speed*100+'% speed');
             client.back(speed);
             client.after(1000,function(){                
@@ -83,7 +140,7 @@ io.on('connection', function (socket) {
         }
         if(data.name=='left'){
             currentState='left';
-            var speed=Math.abs(data.value*1.66);            
+            var speed=Math.abs(data.value*1);            
             console.log('Browser asked Ar Drone to go left @'+speed*100+'% speed');
             client.left(speed);
             client.after(1000,function(){                
@@ -96,7 +153,7 @@ io.on('connection', function (socket) {
         }
         if(data.name=='right'){
             currentState='right';
-            var speed=Math.abs(data.value*1.66);            
+            var speed=Math.abs(data.value*1);            
             console.log('Browser asked Ar Drone to go right @'+speed*100+'% speed');
             client.right(speed);
             client.after(1000,function(){                

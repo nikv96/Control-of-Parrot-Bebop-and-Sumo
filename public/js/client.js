@@ -30,6 +30,7 @@ $(function () {
 
         $('#facedetect').click(function(){
             console.log('face detection started');
+            socket.emit('event',{name:'facetrack'})
         });
 
         $('#takeoff').click(function(){
