@@ -49,7 +49,10 @@
             } else if(pressedKey == 'l') {
                 console.log('Passed key to go right.');
                 $('#right').click();
-            } else if (pressedKey != 'f') {
+            } else if (pressedKey == 'f') {
+                console.log('Passed key for facedetect.');
+                $('#facedetect').click();
+            } else {
                 console.log('Passed key to hover.');
                 $('#hover').click();
             }
@@ -103,7 +106,7 @@
                   <ul class="dropdown-menu">
                     <li><a style="background-color:#1d1d1d" href="#">Leap Mode</a></li>
                     <li><a style="background-color:#1d1d1d" href="#">Target Track Mode</a></li>
-                    <li><a style="background-color:#1d1d1d" href="#">Face Track Mode</a></li>
+                    <li><a id="facedetect" style="background-color:#1d1d1d" href="#">Face Track Mode</a></li>
                   </ul>
                 </li>
             </ul>
