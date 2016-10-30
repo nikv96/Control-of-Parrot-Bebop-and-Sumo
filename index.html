@@ -2,11 +2,11 @@
 
 <head>
     <title>Drone GCS</title>
+    <link rel="icon" href="/images/favicon.png">
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/custom.css"></link>
     <script type="text/javascript" src="/js/jquery.min.js"></script>   
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>  
-    <script type="text/javascript" src="/js/nodecopter-client.js"></script>
     <script type="text/javascript" src="/js/socket.io.js"></script>
     <script type="text/javascript" src="/js/leap-0.6.4.min.js"></script>
     <script type="text/javascript" src="/js/client.js"></script>
@@ -70,7 +70,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" style="color:white" href="#">Drone GCS</a>
+              <a class="navbar-brand" style="font-size:30px;color:white" href="#">Drone GCS</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -79,13 +79,6 @@
                     <div class="col-md-12" style="margin-top:23px">
                         <button type="button" class="btn btn-default" aria-label="Left Align" id="calibrate" style="padding:8px">
                             <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </li>
-                <li>
-                    <div class="col-md-12" style="margin-top:23px">
-                        <button type="button" class="btn btn-danger" aria-label="Left Align" id="leap">
-                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>&nbsp;Leap
                         </button>
                     </div>
                 </li>
@@ -104,9 +97,9 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" style="background-color:#1d1d1d; color:white" data-toggle="dropdown">Flight Modes<span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a style="background-color:#1d1d1d" href="#">Leap Mode</a></li>
-                    <li><a style="background-color:#1d1d1d" href="#">Target Track Mode</a></li>
-                    <li><a id="facedetect" style="background-color:#1d1d1d" href="#">Face Track Mode</a></li>
+                    <li><a id="leap" style="background-color:#1d1d1d; color:white" onmouseover="document.getElementById('leap').style.backgroundColor='gray';" onmouseout="document.getElementById('leap').style.backgroundColor='#1d1d1d';" href="#">Leap Mode</a></li>
+                    <li><a id="targetTrack" style="background-color:#1d1d1d; color:white" onmouseover="document.getElementById('targetTrack').style.backgroundColor='gray';" onmouseout="document.getElementById('targetTrack').style.backgroundColor='#1d1d1d';" href="#">Target Track Mode</a></li>
+                    <li><a id="facedetect" style="background-color:#1d1d1d; color:white" onmouseover="document.getElementById('facedetect').style.backgroundColor='gray';" onmouseout="document.getElementById('facedetect').style.backgroundColor='#1d1d1d';" href="#">Face Track Mode</a></li>
                   </ul>
                 </li>
             </ul>
@@ -119,15 +112,15 @@
             <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Drone 1 Live Feed</div>
-                    <div class="panel-body" id="placeholder">
-                    </div>
+                    <canvas width="640" height="360" style="background-color: rgb(51, 51, 51);" id="placeholder">
+                    </canvas>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">Drone 2 Live Feed</div>
-                    <div class="panel-body" id="placeholder2">
-                    </div>
+                    <canvas width="640" height="360" style="background-color: rgb(51, 51, 51);" id="placeholder2">
+                    </canvas>
                 </div>
             </div>
         </div>

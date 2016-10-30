@@ -1,11 +1,7 @@
 $(function () {
 
-    function startDroneStream() {
-        new NodecopterStream(document.getElementById('placeholder'), {port: 3001});
-    }
-
     function startDroneController(){
-        var socket = io.connect('http://localhost:3002');
+        var socket = io.connect('http://localhost:3001');
         console.log('connected to 3002')
 
         socket.on('connect', function () {
@@ -26,6 +22,15 @@ $(function () {
                 altitude = data.value;
                 document.getElementById('altitude-value').innerHTML = data.value+' m';
             }
+        });
+
+        var ctx = document.getElementById('placeholder').getContext('2d');
+        socket.on("image", function(info) {
+          if (info.image) {
+            var img = new Image();
+            img.src = 'data:image/jpeg;base64,' + info.buffer;
+            ctx.drawImage(img, 0, 0);
+          }
         });
 
         $('#facedetect').click(function(){
@@ -108,14 +113,10 @@ $(function () {
             if(leap_motion==true){
                 leap_motion=false;
                 console.log('Leap Disabled');
-                $('#leap').removeClass('btn btn-success');                        
-                $('#leap').addClass('btn btn-danger');
             }
             else{
                 leap_motion=true;
                 console.log('Leap Enabled');
-                $('#leap').removeClass('btn btn-danger');                        
-                $('#leap').addClass('btn btn-success active');
             }
 
         });
@@ -364,7 +365,6 @@ $(function () {
         });
 
     }
-    startDroneStream();
     startDroneController();
 
 });

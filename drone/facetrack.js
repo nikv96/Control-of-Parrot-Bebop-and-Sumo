@@ -37,8 +37,6 @@ var ImageProcessing = exports = module.exports = function(pngStream, callback){
     }
 
     var detectTarget = function(){ 
-        // Create OpenCV Window
-        var window = new cv.NamedWindow('Result', 0);
         if (processingImage == true) {
           cv.readImage(lastPng, function(err, image) {
               if (err) 
@@ -52,22 +50,23 @@ var ImageProcessing = exports = module.exports = function(pngStream, callback){
                 {}, 
                 function(err, faces){
                   if(faces.length != 0){
+                    var max_width = faces[0].width;
+                    var face;
                     for (var i = 0; i < faces.length; i++){
-                      var face = faces[i];
-                      image.rectangle([face.x, face.y], [face.width, face.height], [0,255,0], 2);
+                      if(faces[i].width >= max_width)
+                        face = faces[i];
                     }
+
+                    image.rectangle([face.x, face.y], [face.width, face.height], [0,255,0], 2);
 
                     callback({
                       image : image,
                       delatTime : pngDeltaTime,
                       timestamp : lastPngTime,
-                      rects : faces[0]
+                      rects : face
                     });
-
-                    window.show(image);
-                    window.blockingWaitKey(0, 1);
                   }
-                });
+                }, 1.3, 3);
           });
         }
     };
