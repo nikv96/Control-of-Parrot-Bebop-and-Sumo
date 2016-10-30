@@ -1,8 +1,6 @@
-var io = require('socket.io')(3002);
-//io.set('log level', 1);
+var io = require('socket.io')(3001);
 
 var drone = require('ar-drone');
-console.log('Drone required');
 var client = drone.createClient();
 
 client.config('control:altitude_max', '20000');
@@ -15,11 +13,20 @@ io.on('connection', function (socket) {
         spinPidController = new Controller(0.4, 0.01, 0.1)
         ;
     console.log('Connected');
+
+    var currentState='';
+
+    pngStream.on('error', console.log);
+    pngStream.on('data', function(pngBuffer) {
+        if (currentState != 'facetrack'){
+            socket.emit('image', { image: true, buffer: pngBuffer.toString('base64') });
+        }
+    });
     
 
     var FaceTrack = require('./facetrack');
     var faceTrack = FaceTrack(pngStream, function(info){
-        console.log(info);
+        socket.emit('image', { image: true, buffer: info.image.toBuffer().toString('base64') });
         var target = info.rects;
         var im = info.image;
         var targetWidth = 100;
@@ -66,10 +73,8 @@ io.on('connection', function (socket) {
 
     setInterval(function(){
         var currentAltitude = client.lastAltitude;
-        socket.emit('event', { name: 'altitude',value: currentAltitude});
+        socket.emit('event', { name: 'altitude',value: currentAltitude!=undefined?currentAltitude:0});
     },1000);
-
-    var currentState='';
 
     socket.on('event', function (data) {
         if(data.name == 'facetrack'){

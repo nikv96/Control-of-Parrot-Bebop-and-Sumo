@@ -5,12 +5,8 @@
   "version": "0.0.1",
   "dependencies": {
     "ar-drone": "latest",
-    "dronestream": "latest",
     "express": "latest",
-    "node-bebop": "latest",
-    "node-gyp": "^3.4.0",
-    "node-pre-gyp": "^0.6.30",
-    "opencv": "~0.1.0",
+    "opencv": "latest",
     "socket.io": "latest",
     "socket.io-client": "latest"
   },

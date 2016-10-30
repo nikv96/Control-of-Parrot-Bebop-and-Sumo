@@ -9,7 +9,6 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-//require('./drone/camera-feed');
 require('./drone/controller');
 
 server.listen(3000);
